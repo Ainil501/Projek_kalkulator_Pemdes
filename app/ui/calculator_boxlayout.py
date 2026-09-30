@@ -1,7 +1,13 @@
-from PyQt6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QPushButton, QSizePolicy
-)
+from app.logic.calculator_engine import hitung
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 def buat_tombol(teks, warna_bg, lebar_min=50, tinggi_min=50, font_size=20):
@@ -34,35 +40,40 @@ class CalculatorBox(QWidget):
         layout4 = QHBoxLayout()
         layout5 = QHBoxLayout()
 
-        # Layar / tampilan angka
-        line = QLineEdit()
-        line.setMinimumSize(200, tinggi_min)
-        line.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        line.setStyleSheet("""
+        # PERBAIKAN: Gunakan self.line agar menjadi atribut class
+        self.line = QLineEdit()
+        self.line.setMinimumSize(200, tinggi_min)
+        self.line.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.line.setStyleSheet("""
             background-color: #545454;
             color: #FFFFFF;
             border-radius: 8px;
             font-size: 22px;
         """)
-        layout1.addWidget(line)
+        layout1.addWidget(self.line)  # Update ke self.line
 
         # Baris 2: tombol khusus + clear
         buttonKhusus1 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
         buttonKhusus2 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
         buttonKhusus3 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
         button_C = buat_tombol("C", "#FF3131", lebar_min, tinggi_min)
+        button_C.clicked.connect(self.hapus_semua)
 
         layout2.addWidget(buttonKhusus1)
         layout2.addWidget(buttonKhusus2)
         layout2.addWidget(buttonKhusus3)
         layout2.addWidget(button_C)
 
-        # Baris 3: bagi, kali, hasil (hasil 2x lebih lebar)
+        # Baris 3: bagi, kali, hasil
         button_bagi = buat_tombol("/", "#FF751F", lebar_min, tinggi_min)
         button_kali = buat_tombol("x", "#FF751F", lebar_min, tinggi_min)
         button_hasil = buat_tombol("=", "#00BF63", lebar_min * 2, tinggi_min)
+        button_bagi.clicked.connect(lambda: self.tambah_ke_layar("/"))
+        button_kali.clicked.connect(lambda: self.tambah_ke_layar("*"))
+        button_hasil.clicked.connect(self.proses_hasil)
 
-        # stretch factor: hasil dapat jatah 2x lebih lebar dari tombol lain
         layout3.addWidget(button_bagi, 1)
         layout3.addWidget(button_kali, 1)
         layout3.addWidget(button_hasil, 2)
@@ -72,6 +83,10 @@ class CalculatorBox(QWidget):
         button_7 = buat_tombol("7", "#545454", lebar_min, tinggi_min)
         button_9 = buat_tombol("9", "#545454", lebar_min, tinggi_min)
         button_tambah = buat_tombol("+", "#FF751F", lebar_min, tinggi_min)
+        button_6.clicked.connect(lambda: self.tambah_ke_layar("6"))
+        button_7.clicked.connect(lambda: self.tambah_ke_layar("7"))
+        button_9.clicked.connect(lambda: self.tambah_ke_layar("9"))
+        button_tambah.clicked.connect(lambda: self.tambah_ke_layar("+"))
 
         layout4.addWidget(button_6)
         layout4.addWidget(button_7)
@@ -83,6 +98,10 @@ class CalculatorBox(QWidget):
         button_1 = buat_tombol("1", "#545454", lebar_min, tinggi_min)
         button_5 = buat_tombol("5", "#545454", lebar_min, tinggi_min)
         button_kurang = buat_tombol("-", "#FF751F", lebar_min, tinggi_min)
+        button_0.clicked.connect(lambda: self.tambah_ke_layar("0"))
+        button_1.clicked.connect(lambda: self.tambah_ke_layar("1"))
+        button_5.clicked.connect(lambda: self.tambah_ke_layar("5"))
+        button_kurang.clicked.connect(lambda: self.tambah_ke_layar("-"))
 
         layout5.addWidget(button_0)
         layout5.addWidget(button_1)
@@ -90,7 +109,7 @@ class CalculatorBox(QWidget):
         layout5.addWidget(button_kurang)
 
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        self.setStyleSheet("background-color: #000000;")  # warna background aplikasi
+        self.setStyleSheet("background-color: #000000;")
 
         layout_main.addLayout(layout1)
         layout_main.addLayout(layout2)
@@ -99,3 +118,15 @@ class CalculatorBox(QWidget):
         layout_main.addLayout(layout5)
 
         self.setLayout(layout_main)
+
+    def tambah_ke_layar(self, karakter):
+        teks_sekarang = self.line.text()
+        self.line.setText(teks_sekarang + karakter)
+
+    def hapus_semua(self):
+        self.line.clear()
+
+    def proses_hasil(self):
+        ekspresi = self.line.text()
+        hasil = hitung(ekspresi)
+        self.line.setText(hasil)

@@ -1,7 +1,8 @@
-# main.py (paling luar, sejajar dengan folder app/)
+# main.py
 import sys
-from PyQt6.QtWidgets import QApplication
+
 from app.ui.main_window import MainWindow
+from PyQt6.QtWidgets import QApplication
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
