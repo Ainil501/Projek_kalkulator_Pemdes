@@ -42,6 +42,7 @@ class CalculatorBox(QWidget):
 
         # PERBAIKAN: Gunakan self.line agar menjadi atribut class
         self.line = QLineEdit()
+        self.line.setReadOnly(True)
         self.line.setMinimumSize(200, tinggi_min)
         self.line.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -55,9 +56,9 @@ class CalculatorBox(QWidget):
         layout1.addWidget(self.line)  # Update ke self.line
 
         # Baris 2: tombol khusus + clear
-        buttonKhusus1 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
-        buttonKhusus2 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
-        buttonKhusus3 = buat_tombol("K", "#FF751F", lebar_min, tinggi_min)
+        buttonKhusus1 = buat_tombol("x²", "#FF751F", lebar_min, tinggi_min)
+        buttonKhusus2 = buat_tombol("1/x", "#FF751F", lebar_min, tinggi_min)
+        buttonKhusus3 = buat_tombol("√x", "#FF751F", lebar_min, tinggi_min)
         button_C = buat_tombol("C", "#FF3131", lebar_min, tinggi_min)
         button_C.clicked.connect(self.hapus_semua)
 

@@ -11,11 +11,14 @@ class CalculatorGrid(QWidget):
 
         grid = QGridLayout()
         self.line = QLineEdit()
+        self.line.setReadOnly(True)
+        self.line.setMinimumSize(200, 50)
+        self.line.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.line.setStyleSheet("background:#545454;color:white;border-radius:8px;font-size:22px;")
         grid.addWidget(self.line, 0, 0, 1, 4)
 
         data = [
-            ("K",1,0),("K",1,1),("K",1,2),("C",1,3),
+            ("x²",1,0),("1/x",1,1),("√x",1,2),("C",1,3),
             ("/",2,0),("x",2,1),("=",2,2),
             ("6",3,0),("7",3,1),("9",3,2),("+",3,3),
             ("0",4,0),("1",4,1),("5",4,2),("-",4,3)
@@ -25,7 +28,7 @@ class CalculatorGrid(QWidget):
             b = QPushButton(t)
             b.setMinimumSize(50,50)
             b.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-            warna = "#FF3131" if t=="C" else "#00BF63" if t=="=" else "#FF751F" if t in "K/+-x" else "#545454"
+            warna = "#FF3131" if t == "C" else "#00BF63" if t == "=" else "#FF751F" if t in ("x²", "1/x", "√x", "/", "+", "-", "x") else "#545454"
             b.setStyleSheet(f"background:{warna};color:white;border-radius:8px;font-size:20px;font-weight:bold;")
             if t == "C":
                 b.clicked.connect(self.hapus_semua)
