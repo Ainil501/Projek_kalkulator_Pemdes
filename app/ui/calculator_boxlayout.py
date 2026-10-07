@@ -1,4 +1,3 @@
-from app.logic.calculator_engine import hitung
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QHBoxLayout,
@@ -8,6 +7,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from app.logic.calculator_engine import CalculatorEngine
 
 
 def buat_tombol(teks, warna_bg, lebar_min=50, tinggi_min=50, font_size=20):
@@ -29,6 +30,7 @@ def buat_tombol(teks, warna_bg, lebar_min=50, tinggi_min=50, font_size=20):
 class CalculatorBox(QWidget):
     def __init__(self):
         super().__init__()
+        self.engine = CalculatorEngine()
 
         lebar_min = 50
         tinggi_min = 50
@@ -61,6 +63,9 @@ class CalculatorBox(QWidget):
         buttonKhusus3 = buat_tombol("√x", "#FF751F", lebar_min, tinggi_min)
         button_C = buat_tombol("C", "#FF3131", lebar_min, tinggi_min)
         button_C.clicked.connect(self.hapus_semua)
+        buttonKhusus1.clicked.connect(self.pangkat)
+        buttonKhusus2.clicked.connect(self.respirokal)
+        buttonKhusus3.clicked.connect(self.akar)
 
         layout2.addWidget(buttonKhusus1)
         layout2.addWidget(buttonKhusus2)
@@ -121,13 +126,22 @@ class CalculatorBox(QWidget):
         self.setLayout(layout_main)
 
     def tambah_ke_layar(self, karakter):
-        teks_sekarang = self.line.text()
-        self.line.setText(teks_sekarang + karakter)
+        self.line.setText(self.engine.tambah_karakter(karakter))
 
     def hapus_semua(self):
-        self.line.clear()
+        self.line.setText(self.engine.hapus_semua())
 
     def proses_hasil(self):
-        ekspresi = self.line.text()
-        hasil = hitung(ekspresi)
-        self.line.setText(hasil)
+        self.line.setText(self.engine.proses_hasil())
+
+    def pangkat(self):
+        self.line.setText(self.engine.pangkat())
+
+    def respirokal(self):
+        self.line.setText(self.engine.respirokal())
+
+    def akar(self):
+        self.line.setText(self.engine.akar())
+
+    def perbarui_layar(self):
+        self.line.setText(self.engine.ekspresi)

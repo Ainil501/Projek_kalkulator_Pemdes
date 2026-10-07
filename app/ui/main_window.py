@@ -1,7 +1,8 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTabWidget
 from PyQt6.QtGui import QAction, QKeySequence
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTabWidget
+
 from .calculator_boxlayout import CalculatorBox
 from .calculator_gridlayout import CalculatorGrid
 
@@ -12,13 +13,13 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My Calculator")
 
-        tabs = QTabWidget()
-        tabs.setTabPosition(QTabWidget.TabPosition.North)
+        self.tabs = QTabWidget()
+        self.tabs.setTabPosition(QTabWidget.TabPosition.North)
 
-        tabs.addTab(CalculatorBox(), "Box")
-        tabs.addTab(CalculatorGrid(), "Grid")
+        self.tabs.addTab(CalculatorBox(), "Box")
+        self.tabs.addTab(CalculatorGrid(), "Grid")
 
-        self.setCentralWidget(tabs)
+        self.setCentralWidget(self.tabs)
 
         button_tambah = QAction("Tambah", self)
         button_kurang = QAction("Kurang", self)
@@ -29,6 +30,34 @@ class MainWindow(QMainWindow):
         buttonKhusus1 = QAction("Kuadrat ", self)
         buttonKhusus2 = QAction("kebalikan", self)
         buttonKhusus3 = QAction("Akar kuadrat", self)
+
+        button_tambah.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.tambah_ke_layar("+"))
+        )
+        button_kurang.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.tambah_ke_layar("-"))
+        )
+        button_kali.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.tambah_ke_layar("*"))
+        )
+        button_bagi.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.tambah_ke_layar("/"))
+        )
+        button_hasil.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.proses_hasil())
+        )
+        button_C.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.hapus_semua())
+        )
+        buttonKhusus1.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.pangkat())
+        )
+        buttonKhusus2.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.respirokal())
+        )
+        buttonKhusus3.triggered.connect(
+            lambda: self.jalankan_aksi_tab(lambda t: t.akar())
+        )
 
         button_tambah.setShortcut(QKeySequence("Ctrl+1"))
         button_kurang.setShortcut(QKeySequence("Ctrl+2"))
@@ -49,7 +78,7 @@ class MainWindow(QMainWindow):
         buttonKhusus1.setStatusTip("Kuadrat (x²)")
         buttonKhusus2.setStatusTip("kebalikan (1/x)")
         buttonKhusus3.setStatusTip("Akar kuadrat (√x)")
-        
+
         menu = self.menuBar()
 
         file_menu = menu.addMenu("&Operasi matematika")
@@ -63,6 +92,11 @@ class MainWindow(QMainWindow):
         file_menu.addAction(buttonKhusus1)
         file_menu.addAction(buttonKhusus2)
         file_menu.addAction(buttonKhusus3)
+
+    def jalankan_aksi_tab(self, fungsi):
+        tab_aktif = self.tabs.currentWidget()
+        if tab_aktif:
+            fungsi(tab_aktif)
 
 
 if __name__ == "__main__":
