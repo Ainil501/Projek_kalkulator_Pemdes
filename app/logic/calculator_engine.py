@@ -14,27 +14,42 @@ class CalculatorEngine:
         return self.ekspresi
 
     def proses_hasil(self):
-        if self.ekspresi not in ("", "+", "-", "*", "/"):
-            return str(eval(self.ekspresi))
-        return self.ekspresi
+        try:
+            if self.ekspresi not in ("", "+", "-", "*", "/"):
+                self.ekspresi = str(eval(self.ekspresi))
+                return self.ekspresi
+            return self.ekspresi
+        except Exception:
+            self.ekspresi = ""
+            return "Error"
 
     def pangkat(self):
         if not self.ekspresi:
             return ""
-        self.ekspresi = str(math.pow(int(self.ekspresi), 2))
-        return self.ekspresi
-
-    def respirokal(self):
-        if not self.ekspresi:
-            return ""
-        elif self.ekspresi == "0":
+        try:
+            self.ekspresi = str(math.pow(int(self.ekspresi), 2))
+            return self.ekspresi
+        except Exception:
             self.ekspresi = ""
             return "Error"
-        self.ekspresi = str(eval(f"1/({self.ekspresi})"))
-        return self.ekspresi
+
+    def resiprokal(self):
+        if not self.ekspresi or self.ekspresi == "0":
+            self.ekspresi = ""
+            return "Error"
+        try:
+            self.ekspresi = str(eval(f"1/({self.ekspresi})"))
+            return self.ekspresi
+        except Exception:
+            self.ekspresi = ""
+            return "Error"
 
     def akar(self):
         if not self.ekspresi:
             return ""
-        self.ekspresi = str(math.sqrt(int(self.ekspresi)))
-        return self.ekspresi
+        try:
+            self.ekspresi = str(math.sqrt(int(self.ekspresi)))
+            return self.ekspresi
+        except Exception:
+            self.ekspresi = ""
+            return "Error"

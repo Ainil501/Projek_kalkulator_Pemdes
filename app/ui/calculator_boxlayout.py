@@ -1,3 +1,4 @@
+from app.logic.calculator_engine import CalculatorEngine
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QHBoxLayout,
@@ -7,8 +8,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-from app.logic.calculator_engine import CalculatorEngine
 
 
 def buat_tombol(teks, warna_bg, lebar_min=50, tinggi_min=50, font_size=20):
@@ -42,7 +41,7 @@ class CalculatorBox(QWidget):
         layout4 = QHBoxLayout()
         layout5 = QHBoxLayout()
 
-        # PERBAIKAN: Gunakan self.line agar menjadi atribut class
+        # self.line agar menjadi atribut class
         self.line = QLineEdit()
         self.line.setReadOnly(True)
         self.line.setMinimumSize(200, tinggi_min)
@@ -54,8 +53,9 @@ class CalculatorBox(QWidget):
             color: #FFFFFF;
             border-radius: 8px;
             font-size: 22px;
+            padding : 5px;
         """)
-        layout1.addWidget(self.line)  # Update ke self.line
+        layout1.addWidget(self.line)
 
         # Baris 2: tombol khusus + clear
         buttonKhusus1 = buat_tombol("x²", "#FF751F", lebar_min, tinggi_min)
@@ -64,7 +64,7 @@ class CalculatorBox(QWidget):
         button_C = buat_tombol("C", "#FF3131", lebar_min, tinggi_min)
         button_C.clicked.connect(self.hapus_semua)
         buttonKhusus1.clicked.connect(self.pangkat)
-        buttonKhusus2.clicked.connect(self.respirokal)
+        buttonKhusus2.clicked.connect(self.resiprokal)
         buttonKhusus3.clicked.connect(self.akar)
 
         layout2.addWidget(buttonKhusus1)
@@ -137,8 +137,8 @@ class CalculatorBox(QWidget):
     def pangkat(self):
         self.line.setText(self.engine.pangkat())
 
-    def respirokal(self):
-        self.line.setText(self.engine.respirokal())
+    def resiprokal(self):
+        self.line.setText(self.engine.resiprokal())
 
     def akar(self):
         self.line.setText(self.engine.akar())

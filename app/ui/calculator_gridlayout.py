@@ -1,7 +1,6 @@
+from app.logic.calculator_engine import CalculatorEngine
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLineEdit, QPushButton, QSizePolicy, QWidget
-
-from app.logic.calculator_engine import CalculatorEngine
 
 
 class CalculatorGrid(QWidget):
@@ -19,9 +18,13 @@ class CalculatorGrid(QWidget):
         self.line.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        self.line.setStyleSheet(
-            "background:#545454;color:white;border-radius:8px;font-size:22px;"
-        )
+        self.line.setStyleSheet("""
+            background: #545454;
+            color: white;
+            border-radius: 8px;
+            font-size: 22px; 
+            padding : 5px;
+            """)
         grid.addWidget(self.line, 0, 0, 1, 4)
 
         data = [
@@ -63,7 +66,7 @@ class CalculatorGrid(QWidget):
             elif t == "x²":
                 b.clicked.connect(self.pangkat)
             elif t == "1/x":
-                b.clicked.connect(self.respirokal)
+                b.clicked.connect(self.resiprokal)
             elif t == "√x":
                 b.clicked.connect(self.akar)
             elif t == "=":
@@ -90,8 +93,8 @@ class CalculatorGrid(QWidget):
     def pangkat(self):
         self.line.setText(self.engine.pangkat())
 
-    def respirokal(self):
-        self.line.setText(self.engine.respirokal())
+    def resiprokal(self):
+        self.line.setText(self.engine.resiprokal())
 
     def akar(self):
         self.line.setText(self.engine.akar())
