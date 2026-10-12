@@ -1,4 +1,3 @@
-from app.logic.calculator_engine import CalculatorEngine
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QHBoxLayout,
@@ -8,6 +7,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from app.logic.calculator_engine import CalculatorEngine
 
 
 def buat_tombol(teks, warna_bg, lebar_min=50, tinggi_min=50, font_size=20):

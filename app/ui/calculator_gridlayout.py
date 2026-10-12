@@ -1,6 +1,7 @@
-from app.logic.calculator_engine import CalculatorEngine
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLineEdit, QPushButton, QSizePolicy, QWidget
+
+from app.logic.calculator_engine import CalculatorEngine
 
 
 class CalculatorGrid(QWidget):
@@ -52,11 +53,15 @@ class CalculatorGrid(QWidget):
             warna = (
                 "#FF3131"
                 if t == "C"
-                else "#00BF63"
-                if t == "="
-                else "#FF751F"
-                if t in ("x²", "1/x", "√x", "/", "+", "-", "x")
-                else "#545454"
+                else (
+                    "#00BF63"
+                    if t == "="
+                    else (
+                        "#FF751F"
+                        if t in ("x²", "1/x", "√x", "/", "+", "-", "x")
+                        else "#545454"
+                    )
+                )
             )
             b.setStyleSheet(
                 f"background:{warna};color:white;border-radius:8px;font-size:20px;font-weight:bold;"
